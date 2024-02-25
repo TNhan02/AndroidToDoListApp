@@ -73,15 +73,6 @@ public class AddEventDialog extends DialogFragment {
                 }
             }
         });
-
-        // Apply landscape effect
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // Example of applying landscape effect: change dialog window attributes
-            getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            getDialog().getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-            getDialog().getWindow().setGravity(Gravity.CENTER);
-        }
-
         return rootView;
     }
 }

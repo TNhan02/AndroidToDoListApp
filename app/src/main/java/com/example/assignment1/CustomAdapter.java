@@ -49,7 +49,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             Event event = allEvents.get(i);
             LocalDateTime eventTimestamp = event.timestamp;
 
-            // Find the ViewHolder for the current position
+            // find the ViewHolder for the current position
             RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(i);
             if (viewHolder instanceof ViewHolder) {
                 ViewHolder holder = (ViewHolder) viewHolder;
@@ -76,7 +76,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         LocalDate currentDate = LocalDate.now();
         LocalDate eventDate = eventTimestamp.toLocalDate();
 
-        int color = ContextCompat.getColor(textView.getContext(), R.color.white); // Default color
+        // default color
+        int color = ContextCompat.getColor(textView.getContext(), R.color.white);
 
         if (eventDate.isAfter(currentDate)) {
             color = ContextCompat.getColor(textView.getContext(), R.color.colorYellow);
