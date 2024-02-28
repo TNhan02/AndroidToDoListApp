@@ -32,6 +32,7 @@ public class AddEventDialog extends DialogFragment {
     }
 
     public interface AddEventListener {
+        // method for adding event to database
         void onEventAdded(Event event);
     }
 
