@@ -69,7 +69,7 @@ public class AddEventDialog extends DialogFragment {
 
                     dismiss();
                 } else {
-                    Toast.makeText(requireContext(), "Please fill in the timestamp and name of event", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Please fill in the timestamp and description of event", Toast.LENGTH_SHORT).show();
                 }
             }
         });
