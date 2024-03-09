@@ -45,6 +45,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             }
         }, 0, 60000);
     }
+
     public void updateColors() {
         for(int i = 0; i < allEvents.size(); i++) {
             Event event = allEvents.get(i);

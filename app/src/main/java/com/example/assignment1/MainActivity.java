@@ -1,11 +1,15 @@
 package com.example.assignment1;
 
+import static android.app.ProgressDialog.show;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +33,14 @@ public class MainActivity extends AppCompatActivity implements AddEventDialog.Ad
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        Configuration config = getResources().getConfiguration();
+        int orientation = config != null ? config.orientation : Configuration.ORIENTATION_UNDEFINED;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setContentView(R.layout.activity_main);
+        } else {
+            setContentView(R.layout.activity_main_land);
+        }
 
         eventRecyclerView = findViewById(R.id.recyclerView);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -42,19 +53,30 @@ public class MainActivity extends AppCompatActivity implements AddEventDialog.Ad
             @Override
             public void onChanged(List<Event> events) {
                 customAdapter.setEvents(events);
+                customAdapter.startColorUpdate();
             }
         });
 
         EventRepository eventRepository = new EventRepository(getApplication());
         addEventDialog = new AddEventDialog(eventRepository);
 
-        addButton = findViewById(R.id.addButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addEventDialog.show(getSupportFragmentManager(), "add_event_dialog");
-            }
-        });
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            addButton = findViewById(R.id.addButton);
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addEventDialog.show(getSupportFragmentManager(), "add_event_dialog");
+                }
+            });
+        } else {
+            addButton = findViewById(R.id.button);
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addEventDialog.show(getSupportFragmentManager(), "add_event_dialog");
+                }
+            });
+        }
     }
 
     // method in adapter to be used in MainActivity
