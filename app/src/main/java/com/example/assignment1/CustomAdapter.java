@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.assignment1.data.Event;
+import com.example.assignment1.data.EventViewModel;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,11 +30,13 @@ import java.util.TimerTask;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     private List<Event> allEvents = new ArrayList<>();
     private RecyclerView recyclerView;
+    private EventViewModel eventViewModel;
     private final Handler handler = new Handler(Looper.getMainLooper());     // handler to update colors periodically
     private Timer timer; // timer to arrange the time of checking current datetime to update colors
 
-    public CustomAdapter(RecyclerView recyclerView) {
+    public CustomAdapter(RecyclerView recyclerView, EventViewModel eventViewModel) {
         this.recyclerView = recyclerView;
+        this.eventViewModel = eventViewModel;
     }
 
     public void startColorUpdate() {
@@ -98,7 +102,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.text_row_item, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, eventViewModel, this);
     }
 
     @Override
@@ -117,10 +121,26 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView eventTextView;
+        private Button removeButton;
+        private EventViewModel eventViewModel;
+        private CustomAdapter customAdapter;
 
-        public ViewHolder(@NonNull View itemView) {
+
+        public ViewHolder(@NonNull View itemView, EventViewModel eventViewModel, CustomAdapter adapter) {
             super(itemView);
             eventTextView = itemView.findViewById(R.id.textView);
+            removeButton = itemView.findViewById(R.id.removeButton);
+
+            removeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        Event eventToDelete = adapter.allEvents.get(position);
+                        eventViewModel.delete(eventToDelete);
+                    }
+                }
+            });
         }
 
         public void bind(Event event) {

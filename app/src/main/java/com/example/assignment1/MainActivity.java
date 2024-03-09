@@ -45,9 +45,6 @@ public class MainActivity extends AppCompatActivity implements AddEventDialog.Ad
         eventRecyclerView = findViewById(R.id.recyclerView);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        customAdapter = new CustomAdapter(eventRecyclerView);
-        eventRecyclerView.setAdapter(customAdapter);
-
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         eventViewModel.getAllEvents().observe(this, new Observer<List<Event>>() {
             @Override
@@ -57,9 +54,10 @@ public class MainActivity extends AppCompatActivity implements AddEventDialog.Ad
             }
         });
 
-        EventRepository eventRepository = new EventRepository(getApplication());
-        addEventDialog = new AddEventDialog(eventRepository);
+        customAdapter = new CustomAdapter(eventRecyclerView, eventViewModel);
+        eventRecyclerView.setAdapter(customAdapter);
 
+        addEventDialog = new AddEventDialog(eventViewModel);
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             addButton = findViewById(R.id.addButton);
             addButton.setOnClickListener(new View.OnClickListener() {

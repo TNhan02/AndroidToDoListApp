@@ -1,13 +1,9 @@
 package com.example.assignment1;
 
-import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.assignment1.data.Event;
 import com.example.assignment1.data.EventRepository;
+import com.example.assignment1.data.EventViewModel;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,10 +22,10 @@ import java.time.format.DateTimeFormatter;
 public class AddEventDialog extends DialogFragment {
     private EditText description, timestamp;
     private Button saveButton;
-    private EventRepository eventRepository;
+    private EventViewModel eventViewModel;
 
-    public AddEventDialog(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
+    public AddEventDialog(EventViewModel eventViewModel) {
+        this.eventViewModel = eventViewModel;
     }
 
     public interface AddEventListener {
@@ -45,8 +42,6 @@ public class AddEventDialog extends DialogFragment {
         timestamp = rootView.findViewById(R.id.editTimestampEvent);
         saveButton = rootView.findViewById(R.id.saveButton);
 
-        eventRepository = new EventRepository(requireActivity().getApplication());
-
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +56,7 @@ public class AddEventDialog extends DialogFragment {
                     newEvent.timestamp = eventTime;
 
                     // add new event to database
-                    eventRepository.insert(newEvent);
+                    eventViewModel.create(newEvent);
 
                     // notify MainActivity of new event
                     if (getActivity() instanceof AddEventListener) {
